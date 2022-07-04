@@ -653,104 +653,104 @@ const Home = (props: HomeProps) => {
                 {wallet ?
                   <WalletAmount>{(balance || 0).toLocaleString()} sol<ConnectButton2/></WalletAmount> :
                   <ConnectButton>Connect wallet</ConnectButton>}
-              </Wallet>
+            </Wallet>
             </div>
               </nav>
             </div>
 
                 
             <MainContainer>
-                    <div className="imgcontainer">
-                        <table className="imgtable"> 
-                          <tr>
-                            <td height='0'>
-                              <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                            </td>
-                            <td height="0">
-                              <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td height="0">
-                              <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                            </td>
-                            <td height="0">
-                              <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                            </td>
-                          </tr>
-                        </table>
-                    </div>
-                            {wallet && isActive && whitelistEnabled && (whitelistTokenBalance > 0) &&
-                              <h3>You have {whitelistTokenBalance} whitelist mint(s) remaining.</h3>}
+              <div className="imgcontainer">
+                <table className="imgtable"> 
+                  <tr>
+                    <td height='0'>
+                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
+                    </td>
+                    <td height="0">
+                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height="0">
+                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
+                    </td>
+                    <td height="0">
+                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+                {wallet && isActive && whitelistEnabled && (whitelistTokenBalance > 0) &&
+                <h3>You have {whitelistTokenBalance} whitelist mint(s) remaining.</h3>}
 
-                    <DesContainer>
-                      <div className="logobox">
-                       <Logo><a href="http://localhost:3000/"  rel="noopener noreferrer"><img alt="" src="logo-16.svg"/></a></Logo>                                                                                 
-                      </div>
-                        <NFT>
-                            <Counter/>
-                            <MintButtonContainer>
-                                {!isActive && candyMachine?.state.goLiveDate ? (
-                                    <Countdown
-                                        date={toDate(candyMachine?.state.goLiveDate)}
-                                        onMount={({completed}) => completed && setIsActive(true)}
-                                        onComplete={() => {
-                                            setIsActive(true);
+            <DesContainer>
+              <div className="logobox">
+                <Logo><a href="http://localhost:3000/"  rel="noopener noreferrer"><img alt="" src="logo-16.svg"/></a></Logo>                                                                                 
+              </div>
+                <NFT>
+                    <Counter/>
+                    <MintButtonContainer>
+                        {!isActive && candyMachine?.state.goLiveDate ? (
+                            <Countdown
+                                date={toDate(candyMachine?.state.goLiveDate)}
+                                onMount={({completed}) => completed && setIsActive(true)}
+                                onComplete={() => {
+                                    setIsActive(true);
+                                }}
+                                renderer={renderCounter}
+                            />) : (
+                            !wallet ? (
+                                    <ConnectButton3>Connect Wallet</ConnectButton3>
+                                ) :
+                                candyMachine?.state.gatekeeper &&
+                                wallet.publicKey &&
+                                wallet.signTransaction ? (
+                                    <GatewayProvider
+                                        wallet={{
+                                            publicKey:
+                                                wallet.publicKey ||
+                                                new PublicKey(CANDY_MACHINE_PROGRAM),
+                                            //@ts-ignore
+                                            signTransaction: wallet.signTransaction,
                                         }}
-                                        renderer={renderCounter}
-                                    />) : (
-                                    !wallet ? (
-                                            <ConnectButton3>Connect Wallet</ConnectButton3>
-                                        ) :
-                                        candyMachine?.state.gatekeeper &&
-                                        wallet.publicKey &&
-                                        wallet.signTransaction ? (
-                                            <GatewayProvider
-                                                wallet={{
-                                                    publicKey:
-                                                        wallet.publicKey ||
-                                                        new PublicKey(CANDY_MACHINE_PROGRAM),
-                                                    //@ts-ignore
-                                                    signTransaction: wallet.signTransaction,
-                                                }}
-                                                // // Replace with following when added
-                                                // gatekeeperNetwork={candyMachine.state.gatekeeper_network}
-                                                gatekeeperNetwork={
-                                                    candyMachine?.state?.gatekeeper?.gatekeeperNetwork
-                                                } // This is the ignite (captcha) network
-                                                /// Don't need this for mainnet
-                                                clusterUrl={rpcUrl}
-                                                options={{autoShowModal: false}}
-                                            >
-                                                <MintButton
-                                                    candyMachine={candyMachine}
-                                                    isMinting={isMinting}
-                                                    isActive={isActive}
-                                                    isSoldOut={isSoldOut}
-                                                    onMint={onMint}
-                                                />
-                                            </GatewayProvider>
-                                        ) : (
-                                            <MintButton
-                                                candyMachine={candyMachine}
-                                                isMinting={isMinting}
-                                                isActive={isActive}
-                                                isSoldOut={isSoldOut}
-                                                onMint={onMint}
-                                            />
+                                        // // Replace with following when added
+                                        // gatekeeperNetwork={candyMachine.state.gatekeeper_network}
+                                        gatekeeperNetwork={
+                                            candyMachine?.state?.gatekeeper?.gatekeeperNetwork
+                                        } // This is the ignite (captcha) network
+                                        /// Don't need this for mainnet
+                                        clusterUrl={rpcUrl}
+                                        options={{autoShowModal: false}}
+                                    >
+                                        <MintButton
+                                            candyMachine={candyMachine}
+                                            isMinting={isMinting}
+                                            isActive={isActive}
+                                            isSoldOut={isSoldOut}
+                                            onMint={onMint}
+                                        />
+                                    </GatewayProvider>
+                                ) : (
+                                    <MintButton
+                                        candyMachine={candyMachine}
+                                        isMinting={isMinting}
+                                        isActive={isActive}
+                                        isSoldOut={isSoldOut}
+                                        onMint={onMint}
+                                    />
 
-                                        ))}
-                            </MintButtonContainer>
-                            {wallet && isActive &&
-                                /* <p>Total Minted : {100 - (itemsRemaining * 100 / itemsAvailable)}%</p>}*/
-                              <h3 className="total_minted">TOTAL MINTED : {itemsRedeemed} / {itemsAvailable}</h3>}
-                       
-                            {wallet && isActive && solanaExplorerLink &&
-                              <SolExplorerLink href={solanaExplorerLink} target="_blank">View on Solana
-                                Explorer</SolExplorerLink>}
-                        </NFT>
-                    </DesContainer>
-                    </MainContainer>
+                                ))}
+                    </MintButtonContainer>
+                    {wallet && isActive &&
+                        /* <p>Total Minted : {100 - (itemsRemaining * 100 / itemsAvailable)}%</p>}*/
+                      <h3 className="total_minted">TOTAL MINTED : {itemsRedeemed} / {itemsAvailable}</h3>}
+                
+                    {wallet && isActive && solanaExplorerLink &&
+                      <SolExplorerLink href={solanaExplorerLink} target="_blank">View on Solana
+                        Explorer</SolExplorerLink>}
+                </NFT>
+            </DesContainer>
+            </MainContainer>
             <Snackbar
                 open={alertState.open}
                 autoHideDuration={6000}
