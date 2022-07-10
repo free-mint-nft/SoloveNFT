@@ -224,11 +224,13 @@ const Price = styled(Chip)`
 `;
 
 const Image = styled.img`
-  height: 400px;
+  height: 250px;
   width: auto;
+  padding: 5px;
   border-radius: 7px;
   box-shadow: 5px 5px 40px 5px rgba(0,0,0,0.5);
 `;
+
 
 const BorderLinearProgress = styled(LinearProgress)`
   margin: 20px 0;
@@ -602,6 +604,72 @@ const Home = (props: HomeProps) => {
         props.connection,
     ]);
     
+    function Header(){
+      return(
+        <div id="header">
+          <nav className="navbar">
+            <div className="navbar_logo">
+              <a href=" 홈페이지 주소  "> <img src="logo1.svg" alt="Logo" style={{height:'35px'}}/> </a>
+            </div>
+            <ul className="navbar_icons">
+              <li><a href="" target="_blank"><FaHome/></a></li>
+              <li><a href="" target="_blank"><FaTwitter/></a></li>
+              <li><a href="" target="_blank"><FaTelegram/></a></li>
+              <li><a href="" target="_blank"><FaInstagram/></a></li>
+              <li><a href="" target="_blank"><FaDiscord/></a></li>
+              <li><a href="" target="_blank"><FaShoppingCart/></a></li>
+            </ul>
+            <div>
+              <Wallet>
+                {wallet ?
+                  <WalletAmount>{(balance || 0).toLocaleString()} sol<ConnectButton2/></WalletAmount> :
+                  <ConnectButton>Connect wallet</ConnectButton>}
+              </Wallet>
+            </div>
+          </nav>
+        </div>
+      )
+    }
+    
+    function ImgContainer({ children }){
+      return(
+          <div className="imgcontainer">
+            {children}
+            <table className="imgtable"> 
+              <tr>
+                <td height='0'>
+                  <div className="parentImage">
+                    <div style= {{position:'absolute', bottom:'0'}}><Image className="tableHoverImage" src="soloveRare.png"/></div>
+                    <Image className="tableImage" src="Solove.jpg" alt="NFT To Mint"/>
+                  </div>
+                </td>
+                <td height="0">
+                  <div className="parentImage">
+                    <div style={{position:'absolute', bottom:'0'}}><Image className="tableHoverImage" src="soloveRare.png"/></div>
+                    <Image className="tableImage" src="Solove.jpg" alt="NFT To Mint"/>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td height="1">
+                  <div className="parentImage">
+                    <div style= {{position:'absolute',bottom:'0'}}><Image className="tableHoverImage" src="soloveRare.png"/></div>
+                    <Image className="tableImage" src="Solove.jpg" alt="NFT To Mint"/>
+                  </div>
+                </td>
+                <td height="1">
+                  <div className="parentImage">
+                    <div style= {{position:'absolute',bottom:'0'}}><Image className="tableHoverImage" src="soloveRare.png"/></div>
+                    <Image className="tableImage" src="Solove.jpg" alt="NFT To Mint"/>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+      )
+    }
+
+    
     const Counter = () => {
         const selectList = ['1', '2', '3', '4', '5'];
         const [Selected, setSelected] = useState('1');
@@ -633,57 +701,14 @@ const Home = (props: HomeProps) => {
     return (
         <main>
             <div className="big_wrap" >
-            <div id="header">
-              <nav className="navbar">
-                <div className="navbar_logo">
-                  <a href=" 홈페이지 주소  "> <img src="logo1.svg" alt="Logo" style={{height:'35px'}}/> </a>
-                </div>
-              <ul className="navbar_icons">
-                <li><a href="" target="_blank"><FaHome/></a></li>
-                <li><a href="" target="_blank"><FaTwitter/></a></li>
-                <li><a href="" target="_blank"><FaTelegram/></a></li>
-                <li><a href="" target="_blank"><FaInstagram/></a></li>
-                <li><a href="" target="_blank"><FaDiscord/></a></li>
-                <li><a href="" target="_blank"><FaShoppingCart/></a></li>
-            </ul>
+              <Header></Header>   
+              <MainContainer>
+              <ImgContainer>
+                {/* {wallet && isActive && whitelistEnabled && (whitelistTokenBalance > 0) &&
+                <h3>You have {whitelistTokenBalance} whitelist mint(s) remaining.</h3>} */}
+              </ImgContainer>
 
-              
-            <div>
-            <Wallet>
-                {wallet ?
-                  <WalletAmount>{(balance || 0).toLocaleString()} sol<ConnectButton2/></WalletAmount> :
-                  <ConnectButton>Connect wallet</ConnectButton>}
-            </Wallet>
-            </div>
-              </nav>
-            </div>
-
-                
-            <MainContainer>
-              <div className="imgcontainer">
-                <table className="imgtable"> 
-                  <tr>
-                    <td height='0'>
-                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                    </td>
-                    <td height="0">
-                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td height="0">
-                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                    </td>
-                    <td height="0">
-                      <div><Image className="image" src="Solove.jpg" alt="NFT To Mint" style={{height:'250px'}}/></div>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-                {wallet && isActive && whitelistEnabled && (whitelistTokenBalance > 0) &&
-                <h3>You have {whitelistTokenBalance} whitelist mint(s) remaining.</h3>}
-
-            <DesContainer>
+              <DesContainer> 
               <div className="logobox">
                 <Logo><a href="http://localhost:3000/"  rel="noopener noreferrer"><img alt="" src="logo-16.svg"/></a></Logo>                                                                                 
               </div>
