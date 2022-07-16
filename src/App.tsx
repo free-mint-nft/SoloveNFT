@@ -25,6 +25,13 @@ import {
 
 import "./App.css";
 import Home from "./Home";
+import MainHome from "./MainHome";
+import About from "./About";
+import Roadmap from "./Roadmap";
+import Faq from "./Faq";
+import Header from "./Header";
+
+import { Route, Routes } from "react-router";
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -92,12 +99,20 @@ const App = () => {
         <ConnectionProvider endpoint={endpoint}>
           <WalletProvider wallets={wallets} autoConnect={true}>
             <WalletModalProvider>
-              <Home
-                candyMachineId={candyMachineId}
-                connection={connection}
-                txTimeout={txTimeout}
-                rpcHost={rpcHost}
-              />
+              <Header/>
+              <Routes>  
+                <Route path='/' element={<MainHome/>}></Route>
+                <Route path='/About' element={<About/>}></Route>
+                <Route path='/Roadmap' element={<Roadmap/>}></Route>
+                <Route path='/Faq' element={<Faq/>}></Route>
+                <Route path="/Mint" element = {<Home
+                                          candyMachineId={candyMachineId}
+                                          connection={connection}
+                                          txTimeout={txTimeout}
+                                          rpcHost={rpcHost}
+                                        />}>
+                </Route>
+              </Routes>
             </WalletModalProvider>
           </WalletProvider>
         </ConnectionProvider>

@@ -319,7 +319,8 @@ const Home = (props: HomeProps) => {
     const [whitelistPrice, setWhitelistPrice] = useState(0);
     const [whitelistEnabled, setWhitelistEnabled] = useState(false);
     const [whitelistTokenBalance, setWhitelistTokenBalance] = useState(0);
-    const [isWhitelist, setIsWhitelist] = useState(false);
+    const [isWhitelist, setIsWhitelist] = useState(true); //whitelist에 유저가 있나요?
+    const [isMinted, setIsMinted] = useState(true);       //유저가 이미 mint를 했나요?
 
     const [alertState, setAlertState] = useState<AlertState>({
         open: false,
@@ -611,6 +612,8 @@ const Home = (props: HomeProps) => {
             if (wallet) {
                 const balance = await props.connection.getBalance(wallet.publicKey);
                 setBalance(balance / LAMPORTS_PER_SOL);
+                console.log(balance);
+                console.log(wallet.publicKey);
             }
         })();
     }, [wallet, props.connection]);
@@ -712,8 +715,8 @@ const Home = (props: HomeProps) => {
     return (
         <main>
           <div className="bigWrap" >
-            <Header></Header>
             <MintContainer>
+              {/* <Header></Header> */}
               <ImgContainer>
                 <ImgTable/>
                 {/* {wallet && isActive && whitelistEnabled && (whitelistTokenBalance > 0) &&
@@ -785,14 +788,14 @@ const Home = (props: HomeProps) => {
                           <ProgressBar>
                             <Progress width = {100-(itemsRemaining*100/itemsAvailable)}/>
                           </ProgressBar>
-                          <h3>Minting Progress : {100-(itemsRemaining*100/itemsAvailable)}%</h3>
+                          <h3 style={{fontWeight:'normal'}}>Minting Progress : {100-(itemsRemaining*100/itemsAvailable)}%</h3>
                         </div>
 
                         }
 
-                      {wallet && isActive && solanaExplorerLink &&
+                      {/* {wallet && isActive && solanaExplorerLink &&
                         <SolExplorerLink href={solanaExplorerLink} target="_blank">View on Solana
-                          Explorer</SolExplorerLink>}
+                          Explorer</SolExplorerLink>} */}
                 </NFT>
             </DesContainer>
             </MintContainer>
