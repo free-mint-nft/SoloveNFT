@@ -1,9 +1,16 @@
 import React from 'react';
 import styled from "styled-components";
+import Button from '@material-ui/core/Button';
+import {BiChevronRightCircle} from "react-icons/bi";
 
 interface ImageTest{
     length: number;
 };
+
+const StyledButton = styled(Button)`
+background-color: white !important;
+color:black !important;
+`;
 
 const Image = styled.img`
   width: ${(props:ImageTest) => props.length}px;
@@ -22,11 +29,11 @@ function MainHome(){
                     <span style= {{position:'absolute', right:'10%', bottom:'2%'}}><Image length={250} src={'Solove.jpg'}></Image></span>
                     
                 </div>
-                <div className="textContainer" style={{width:'40%', margin:'20px 10px'}}>
-                    <h1 style={{fontSize:'60px',lineHeight:'0.7em'}}>Welcome to </h1>
-                    <h2 style={{fontSize:'70px', lineHeight:'0.7em'}}>Solove</h2>
-                    <p style={{marginTop:'120px'}}>Solove Supports all the loves in the world.<br/>Join our world and create a new relationship</p>
-                    <button>Click to shop</button>
+                <div className="textContainer">
+                    <h1>Welcome to </h1>
+                    <img src="solovewhite.png" width="300px"></img>
+                    <p>Solove Supports all the loves in the world.<br/>Join our world and create a new relationship</p>
+                    <StyledButton formTarget='_blank' href="https://opensea.io">Click to shop<BiChevronRightCircle/></StyledButton>
                 </div>
             </div>
         </div>

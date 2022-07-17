@@ -767,6 +767,7 @@ const Home = (props: HomeProps) => {
                                           isSoldOut={isSoldOut}
                                           onMint={onMint}
                                           isWhitelist={isWhitelist}
+                                          isMinted={isMinted}
                                       />
                                   </GatewayProvider>
                               ) : (
@@ -777,6 +778,7 @@ const Home = (props: HomeProps) => {
                                       isSoldOut={isSoldOut}
                                       onMint={onMint}
                                       isWhitelist={isWhitelist}
+                                      isMinted={isMinted}
                                   />
                               ))}
                     </MintButtonContainer>
