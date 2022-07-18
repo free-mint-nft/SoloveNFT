@@ -319,8 +319,9 @@ const Home = (props: HomeProps) => {
     const [whitelistPrice, setWhitelistPrice] = useState(0);
     const [whitelistEnabled, setWhitelistEnabled] = useState(false);
     const [whitelistTokenBalance, setWhitelistTokenBalance] = useState(0);
-    const [isWhitelist, setIsWhitelist] = useState(true); //whitelist에 유저가 있나요?
-    const [isMinted, setIsMinted] = useState(true);       //유저가 이미 mint를 했나요?
+    const [isWhitelist, setIsWhitelist] = useState(true); //whitelist에 유저가 있나?
+    const [isMinted, setIsMinted] = useState(false);       //유저가 이미 mint를 했나?
+    const [mintcnt, setMintcnt] = useState(1);        //몇개를 민팅할 것인가?
 
     const [alertState, setAlertState] = useState<AlertState>({
         open: false,
@@ -455,156 +456,156 @@ const Home = (props: HomeProps) => {
         });
     }
 
-    const onMint = async () => {
-        try {
-            setIsMinting(true);
-            if (wallet && candyMachine?.program && wallet.publicKey) {
-                const mint = anchor.web3.Keypair.generate();
-                const mintTxId = (
-                    await mintOneToken(candyMachine, wallet.publicKey, mint)
-                )[0];
+    // const onMint = async () => {
+    //     try {
+    //         setIsMinting(true);
+    //         if (wallet && candyMachine?.program && wallet.publicKey) {
+    //             const mint = anchor.web3.Keypair.generate();
+    //             const mintTxId = (
+    //                 await mintOneToken(candyMachine, wallet.publicKey, mint)
+    //             )[0];
 
-                let status: any = {err: true};
-                if (mintTxId) {
-                    status = await awaitTransactionSignatureConfirmation(
-                        mintTxId,
-                        props.txTimeout,
-                        props.connection,
-                        'singleGossip',
-                        true,
-                    );
-                }
+    //             let status: any = {err: true};
+    //             if (mintTxId) {
+    //                 status = await awaitTransactionSignatureConfirmation(
+    //                     mintTxId,
+    //                     props.txTimeout,
+    //                     props.connection,
+    //                     'singleGossip',
+    //                     true,
+    //                 );
+    //             }
 
-                if (!status?.err) {
-                    setAlertState({
-                        open: true,
-                        message: 'Congratulations! Mint succeeded!',
-                        severity: 'success',
-                    });
+    //             if (!status?.err) {
+    //                 setAlertState({
+    //                     open: true,
+    //                     message: 'Congratulations! Mint succeeded!',
+    //                     severity: 'success',
+    //                 });
 
-                    // update front-end amounts
-                    displaySuccess(mint.publicKey);
-                } else {
-                    setAlertState({
-                        open: true,
-                        message: 'Mint failed! Please try again!',
-                        severity: 'error',
-                    });
-                }
-            }
-        } catch (error: any) {
-            // TODO: blech:
-            let message = error.msg || 'Minting failed! Please try again!';
-            if (!error.msg) {
-                if (!error.message) {
-                    message = 'Transaction Timeout! Please try again.';
-                } else if (error.message.indexOf('0x138')) {
-                } else if (error.message.indexOf('0x137')) {
-                    message = `SOLD OUT!`;
-                } else if (error.message.indexOf('0x135')) {
-                    message = `Insufficient funds to mint. Please fund your wallet.`;
-                }
-            } else {
-                if (error.code === 311) {
-                    message = `SOLD OUT!`;
-                } else if (error.code === 312) {
-                    message = `Minting period hasn't started yet.`;
-                }
-            }
+    //                 // update front-end amounts
+    //                 displaySuccess(mint.publicKey);
+    //             } else {
+    //                 setAlertState({
+    //                     open: true,
+    //                     message: 'Mint failed! Please try again!',
+    //                     severity: 'error',
+    //                 });
+    //             }
+    //         }
+    //     } catch (error: any) {
+    //         // TODO: blech:
+    //         let message = error.msg || 'Minting failed! Please try again!';
+    //         if (!error.msg) {
+    //             if (!error.message) {
+    //                 message = 'Transaction Timeout! Please try again.';
+    //             } else if (error.message.indexOf('0x138')) {
+    //             } else if (error.message.indexOf('0x137')) {
+    //                 message = `SOLD OUT!`;
+    //             } else if (error.message.indexOf('0x135')) {
+    //                 message = `Insufficient funds to mint. Please fund your wallet.`;
+    //             }
+    //         } else {
+    //             if (error.code === 311) {
+    //                 message = `SOLD OUT!`;
+    //             } else if (error.code === 312) {
+    //                 message = `Minting period hasn't started yet.`;
+    //             }
+    //         }
 
-            setAlertState({
-                open: true,
-                message,
-                severity: "error",
-            });
-        } finally {
-            setIsMinting(false);
-        }
-    };
+    //         setAlertState({
+    //             open: true,
+    //             message,
+    //             severity: "error",
+    //         });
+    //     } finally {
+    //         setIsMinting(false);
+    //     }
+    // };
 
     const onMint_1 = async () => {
-        try {
-            setIsMinting(true);
-            if (wallet && candyMachine?.program && wallet.publicKey) {
-                const mintTxId: any = (
-                    await mintOneToken_2(candyMachine, wallet.publicKey)
-                );
+      try {
+          setIsMinting(true);
+          if (wallet && candyMachine?.program && wallet.publicKey) {
+              const mintTxId: any = (
+                  await mintOneToken_2(candyMachine, wallet.publicKey, mintcnt)
+              );
 
-                const promiseArray = [];
+              const promiseArray = [];
 
-                for (let index = 0; index < mintTxId.length; index++) {
-                    promiseArray.push(
-                        awaitTransactionSignatureConfirmation(
-                            mintTxId[index],
-                            props.txTimeout,
-                            props.connection,
-                            'singleGossip',
-                            true
-                            )
-                        );
-                }
+              for (let index = 0; index < mintTxId.length; index++) {
+                  promiseArray.push(
+                      awaitTransactionSignatureConfirmation(
+                          mintTxId[index],
+                          props.txTimeout,
+                          props.connection,
+                          'singleGossip',
+                          true
+                          )
+                      );
+              }
 
-                const allTransactionsResult = await Promise.all(promiseArray);
-                let totalSuccess = 0;
-                let totalFailure = 0;
-                for (let index = 0; index < allTransactionsResult.length; index++) {
-                    const transactionStatus = allTransactionsResult[index];
-                    if (!transactionStatus?.err) {
-                        totalSuccess += 1;
-                    } else {
-                        totalFailure += 1;
-                    }
-                }
-                if (totalSuccess) {
-                    setAlertState({
-                        open: true,
-                        message: `Congratulations! ${totalSuccess} mints succeeded!`,
-                        severity: 'success',
-                    });
-                    // update front-end amounts
-                    displaySuccess_2();
-                }
+              const allTransactionsResult = await Promise.all(promiseArray);
+              let totalSuccess = 0;
+              let totalFailure = 0;
+              for (let index = 0; index < allTransactionsResult.length; index++) {
+                  const transactionStatus = allTransactionsResult[index];
+                  if (!transactionStatus?.err) {
+                      totalSuccess += 1;
+                  } else {
+                      totalFailure += 1;
+                  }
+              }
+              if (totalSuccess) {
+                  setAlertState({
+                      open: true,
+                      message: `Congratulations! ${totalSuccess} mints succeeded!`,
+                      severity: 'success',
+                  });
+                  // update front-end amounts
+                  displaySuccess_2();
+              }
 
-                if (totalFailure) {
-                    setAlertState({
-                        open: true,
-                        message: `Some mints failed! ${totalFailure} mints failed!`,
-                        severity: 'error',
-                    });
-                    // update front-end amounts
-                    displaySuccess_2();
-                }
+              if (totalFailure) {
+                  setAlertState({
+                      open: true,
+                      message: `Some mints failed! ${totalFailure} mints failed!`,
+                      severity: 'error',
+                  });
+                  // update front-end amounts
+                  displaySuccess_2();
+              }
 
-            }
-        } catch (error: any) {
-            // TODO: blech:
-            let message = error.msg || 'Minting failed! Please try again!';
-            if (!error.msg) {
-                if (!error.message) {
-                    message = 'Transaction Timeout! Please try again.';
-                } else if (error.message.indexOf('0x138')) {
-                } else if (error.message.indexOf('0x137')) {
-                    message = `SOLD OUT!`;
-                } else if (error.message.indexOf('0x135')) {
-                    message = `Insufficient funds to mint. Please fund your wallet.`;
-                }
-            } else {
-                if (error.code === 311) {
-                    message = `SOLD OUT!`;
-                } else if (error.code === 312) {
-                    message = `Minting period hasn't started yet.`;
-                }
-            }
+          }
+      } catch (error: any) {
+          // TODO: blech:
+          let message = error.msg || 'Minting failed! Please try again!';
+          if (!error.msg) {
+              if (!error.message) {
+                  message = 'Transaction Timeout! Please try again.';
+              } else if (error.message.indexOf('0x138')) {
+              } else if (error.message.indexOf('0x137')) {
+                  message = `SOLD OUT!`;
+              } else if (error.message.indexOf('0x135')) {
+                  message = `Insufficient funds to mint. Please fund your wallet.`;
+              }
+          } else {
+              if (error.code === 311) {
+                  message = `SOLD OUT!`;
+              } else if (error.code === 312) {
+                  message = `Minting period hasn't started yet.`;
+              }
+          }
 
-            setAlertState({
-                open: true,
-                message,
-                severity: "error",
-            });
-        } finally {
-            setIsMinting(false);
-        }
-    };
+          setAlertState({
+              open: true,
+              message,
+              severity: "error",
+          });
+      } finally {
+          setIsMinting(false);
+      }
+  };
 
 
     useEffect(() => {
@@ -685,10 +686,10 @@ const Home = (props: HomeProps) => {
 
     
     const Counter = () => {
-        const selectList = ['1', '2', '3', '4', '5'];
-        const [Selected, setSelected] = useState('1');
+        const mintcntList = [1, 2, 3, 4, 5];
+        
         const handleSelect = (e:any) => {
-        setSelected(e.target.value);
+        setMintcnt(e.target.value);
       };
           return (
           <div className = "btn_info">
@@ -696,8 +697,8 @@ const Home = (props: HomeProps) => {
               <span className="num"> 0.5 </span> 
               <span className="unit"> Sol </span>
               <span>
-                <select className="select" onChange={handleSelect} value={Selected}> 
-                  {selectList.map((item) => (
+                <select className="select" onChange={handleSelect} value={mintcnt}> 
+                  {mintcntList.map((item) => (
                   <option value={item} key={item}> {item}</option>))}
                   </select>
               </span>
@@ -705,7 +706,7 @@ const Home = (props: HomeProps) => {
             <div className="bar"></div>
             <div className="SoloveMintinfo2">
               <span className="label">TOTAL : </span> 
-              <span className="num"> {+Selected*0.5}</span>
+              <span className="num"> {+mintcnt*0.5}</span>
               <span className="unit">Sol</span>
             </div>
           </div>
@@ -765,7 +766,7 @@ const Home = (props: HomeProps) => {
                                           isMinting={isMinting}
                                           isActive={isActive}
                                           isSoldOut={isSoldOut}
-                                          onMint={onMint}
+                                          onMint={onMint_1}
                                           isWhitelist={isWhitelist}
                                           isMinted={isMinted}
                                       />
@@ -776,7 +777,7 @@ const Home = (props: HomeProps) => {
                                       isMinting={isMinting}
                                       isActive={isActive}
                                       isSoldOut={isSoldOut}
-                                      onMint={onMint}
+                                      onMint={onMint_1}
                                       isWhitelist={isWhitelist}
                                       isMinted={isMinted}
                                   />

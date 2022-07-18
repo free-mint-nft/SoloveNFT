@@ -30,7 +30,16 @@ body{
   -webkit-user-select:none; 
   -moz-user-select:none; 
   -ms-user-select:none; 
-  user-select:none
+  user-select:none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar{
+  display:none;
+}
+
+.active p{
+  color:mediumaquamarine;
 }
 
 .bigWrap{

@@ -1,5 +1,4 @@
 import * as anchor from "@project-serum/anchor";
-
 import {
   MintLayout,
   TOKEN_PROGRAM_ID,
@@ -243,7 +242,8 @@ export const getCandyMachineCreator = async (
 export const mintOneToken = async (
     candyMachine: CandyMachine,
     payer: anchor.web3.PublicKey,
-    mint: anchor.web3.Keypair
+    mint: anchor.web3.Keypair,
+    number
 ): Promise<(string | undefined)[]> => {
   const userTokenAccountAddress = (
     await getAtaForMint(mint.publicKey, payer)
@@ -470,10 +470,11 @@ const getTokenWallet = async (
 export const mintOneToken_2 = async (
     candyMachine: CandyMachine,
     payer: anchor.web3.PublicKey,
+    quantity: number = 1
 ) => {
   const signersMatrix = [];
   const instructionsMatrix = [];
-  for (let index = 0; index < 2; index++) {
+  for (let index = 0; index < quantity; index++) {
     const mint = anchor.web3.Keypair.generate();
     const userTokenAccountAddress = (
         await getAtaForMint(mint.publicKey, payer)
@@ -482,7 +483,6 @@ export const mintOneToken_2 = async (
     const candyMachineAddress = candyMachine.id;
     const remainingAccounts = [];
     const signers: anchor.web3.Keypair[] = [mint];
-    const cleanupInstructions = [];
     const instructions = [
       anchor.web3.SystemProgram.createAccount({
         fromPubkey: payer,
@@ -566,7 +566,6 @@ export const mintOneToken_2 = async (
 
   return [];
 };
-
 
 
 export const shortenAddress = (address: string, chars = 4): string => {
