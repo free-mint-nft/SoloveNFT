@@ -613,8 +613,6 @@ const Home = (props: HomeProps) => {
             if (wallet) {
                 const balance = await props.connection.getBalance(wallet.publicKey);
                 setBalance(balance / LAMPORTS_PER_SOL);
-                console.log(balance);
-                console.log(wallet.publicKey);
             }
         })();
     }, [wallet, props.connection]);
